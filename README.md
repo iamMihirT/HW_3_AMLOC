@@ -13,5 +13,4 @@ In this project, I developed container and Kubernetes artifacts to create a scal
 
 All source code, Dockerfiles, and Kubernetes manifest files are available in this repository.
 
-## Repository Structure
 
