@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Stock Predictor</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f0f4f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      width: 400px;
+      text-align: center;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 15px;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      color: #fff;
+      background: #4CAF50;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    #output {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>📈 Stock Price Predictor</h2>
+    <input type="text" id="ticker" placeholder="Enter Stock Ticker (e.g., AAPL)" />
+    <button onclick="getPrediction()">Predict 🚀</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    function getPrediction() {
+      const ticker = document.getElementById('ticker').value.trim();
+      const output = document.getElementById('output');
+
+      if (!ticker) {
+        output.innerHTML = "<span class='error'>⚠️ Please enter a valid ticker symbol.</span>";
+        return;
+      }
+
+      output.innerHTML = "🔄 Predicting...";
+
+      fetch(`http://localhost:8080/predict?ticker=${ticker}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            output.innerHTML = `<span class='error'>⚠️ ${data.error}</span>`;
+          } else {
+            output.innerHTML = `📌 Predicted closing price for <strong>${data.ticker}</strong>: $${data.predicted_close.toFixed(2)}`;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          output.innerHTML = "<span class='error'>🚨 Failed to get prediction. Ensure API is running.</span>";
+        });
+    }
+  </script>
+</body>
+
+</html>

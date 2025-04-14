@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: training-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: train
+        image: gcr.io/dl-k8s-project/training:latest
+        volumeMounts:
+        - name: model-storage
+          mountPath: /app/models
+      restartPolicy: Never
+      volumes:
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: model-storage
